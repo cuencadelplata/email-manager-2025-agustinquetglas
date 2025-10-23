@@ -3,8 +3,6 @@ package com.mycompany.app;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class ModificarContactoTest {
@@ -26,6 +24,30 @@ public class ModificarContactoTest {
 
         assertEquals(1, gestor.getContactos().size());
         assertTrue(gestor.getContactos().contains(contacto));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void agregarContactoSinNombre(){
+        Contacto contacto1 = new Contacto("", "Lukeskywalker@gmail.com");
+        gestor.agregarContacto(contacto1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void agregarContactoNombreNull(){
+        Contacto contacto1 = new Contacto(null, "Lukeskywalker@gmail.com");
+        gestor.agregarContacto(contacto1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void agregarContactoSinEmail(){
+        Contacto contacto1 = new Contacto("John Snow", "");
+        gestor.agregarContacto(contacto1);
+    }
+
+     @Test(expected = IllegalArgumentException.class)
+    public void agregarContactoEmailNull(){
+        Contacto contacto1 = new Contacto("John Snow", null);
+        gestor.agregarContacto(contacto1);
     }
 
     //Editar contacto
@@ -70,7 +92,7 @@ public class ModificarContactoTest {
     public void eliminarContactoNoExistenteNoHaceNada() {
         Contacto contacto = new Contacto("Agustin", "agustin@gmail.com");
         gestor.agregarContacto(contacto);
-
+ 
         // Intentar eliminar un email que no existe
         gestor.eliminarContacto("noexiste@gmail.com");
 
