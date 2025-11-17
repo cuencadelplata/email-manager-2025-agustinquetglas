@@ -14,7 +14,7 @@ public class ModificarContactoTest {
         gestor = new GestorCorreo();
     }
 
-   
+
     //Agregar contacto
     @Test
     public void agregarContacto() {
@@ -44,7 +44,7 @@ public class ModificarContactoTest {
         gestor.agregarContacto(contacto1);
     }
 
-     @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void agregarContactoEmailNull(){
         Contacto contacto1 = new Contacto("John Snow", null);
         gestor.agregarContacto(contacto1);
@@ -92,7 +92,7 @@ public class ModificarContactoTest {
     public void eliminarContactoNoExistenteNoHaceNada() {
         Contacto contacto = new Contacto("Agustin", "agustin@gmail.com");
         gestor.agregarContacto(contacto);
- 
+
         // Intentar eliminar un email que no existe
         gestor.eliminarContacto("noexiste@gmail.com");
 
