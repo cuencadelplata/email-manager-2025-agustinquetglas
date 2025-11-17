@@ -3,6 +3,7 @@ package com.mycompany.app;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -227,7 +228,37 @@ public void restaurarCorreoDesdeEliminados() {
     assertFalse(usuario.getBandejaEliminados().contains(correo));
 }
 
+@Test
+    public void testGuardarEditarYEnviarBorrador() {
+        Contacto remitente = new Contacto("Agustin", "a@mail.com");
+        Contacto destinatario = new Contacto("Sanfer", "romerostachlautaro@ucp.edu.ar");
+        List<Contacto> destinatarios = new ArrayList<>();
+        destinatarios.add(destinatario);
 
+        Usuario usuario = new Usuario(remitente);
+        Correo correo = new Correo("Facu", "Sanfer ponete las pilas que recursamos", remitente, destinatarios);
+
+        // Guardar borrador
+        usuario.guardarBorrador(correo);
+        assertEquals(1, usuario.getBandejaBorradores().size());
+        assertEquals("Facu", usuario.getBandejaBorradores().get(0).getAsunto());
+
+        // Editar borrador
+        usuario.editarBorrador(correo, "Dale!", "Dale que regularizamos sanfer");
+        assertEquals("Dale!", usuario.getBandejaBorradores().get(0).getAsunto());
+        assertEquals("Dale que regularizamos sanfer", usuario.getBandejaBorradores().get(0).getContenido());
+
+        // Enviar borrador
+        usuario.enviarBorrador(correo);
+        assertEquals(0, usuario.getBandejaBorradores().size());
+        assertEquals(1, usuario.getBandejaEnviados().size());
+        assertEquals("Dale!", usuario.getBandejaEnviados().get(0).getAsunto());
+
+        // Casos de error
+        assertThrows(IllegalArgumentException.class, () -> usuario.editarBorrador(correo, "X", "Y"));
+        assertThrows(IllegalArgumentException.class, () -> usuario.enviarBorrador(correo));
+        assertThrows(IllegalArgumentException.class, () -> usuario.guardarBorrador(null));
+    }
 
 
 }

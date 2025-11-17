@@ -31,4 +31,12 @@ public class Correo {
     public List<Contacto> getDestinatarios() {
         return destinatarios;
     }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
 }
