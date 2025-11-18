@@ -228,6 +228,8 @@ public void restaurarCorreoDesdeEliminados() {
     assertFalse(usuario.getBandejaEliminados().contains(correo));
 }
 
+
+
 @Test
     public void testGuardarEditarYEnviarBorrador() {
         Contacto remitente = new Contacto("Agustin", "a@mail.com");
@@ -258,6 +260,66 @@ public void restaurarCorreoDesdeEliminados() {
         assertThrows(IllegalArgumentException.class, () -> usuario.editarBorrador(correo, "X", "Y"));
         assertThrows(IllegalArgumentException.class, () -> usuario.enviarBorrador(correo));
         assertThrows(IllegalArgumentException.class, () -> usuario.guardarBorrador(null));
+    }
+
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void moverCorreoLanzaErrorSiNoExiste() {
+        Correo correo = new Correo("Asunto", "Contenido", remitente, List.of(destinatario1));
+        usuario.moverCorreo(usuario.getBandejaRecibidos(), usuario.getBandejaBorradores(), correo);
+    }
+
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void eliminarCorreoInexistenteLanzaError() {
+        Correo correo = new Correo("Hola", "Mensaje", remitente, List.of(destinatario1));
+        usuario.eliminarCorreo(correo);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void restaurarCorreoInexistenteLanzaError() {
+        Correo correo = new Correo("Hola", "Mensaje", remitente, List.of(destinatario1));
+        usuario.restaurarCorreo(correo);
+    }
+
+
+
+    @Test
+    public void filtrarCorreosConTextoVacioONullDevuelveListaVacia() {
+        Correo correo = new Correo("Asunto", "Contenido", remitente, List.of(destinatario1));
+        usuario.recibirCorreo(correo);
+
+        assertTrue(usuario.filtrarCorreos("").isEmpty());
+        assertTrue(usuario.filtrarCorreos(null).isEmpty());
+    }
+
+
+
+
+
+    @Test
+    public void buscarEnBandejaEntradaEncuentraPorAsuntoRemitenteYDestinatario() {
+        Contacto remitente = new Contacto("Lautaro", "lautaro@mail.com");
+        Contacto destinatario = new Contacto("Agustin", "agustin@mail.com");
+        Correo correo = new Correo("Partido", "No te olvides de traer la bocha", remitente, List.of(destinatario));
+
+        usuario.recibirCorreo(correo);
+
+    assertTrue(usuario.buscarEnBandejaEntrada("Partido").contains(correo));
+    
+        assertTrue(usuario.buscarEnBandejaEntrada("No te olvides de traer la bocha").contains(correo));
+    
+        assertTrue(usuario.buscarEnBandejaEntrada("Lautaro").contains(correo));
+    
+        assertTrue(usuario.buscarEnBandejaEntrada("lautaro@mail.com").contains(correo));
+        
+        assertTrue(usuario.buscarEnBandejaEntrada("Agustin").contains(correo));
+    
+        assertTrue(usuario.buscarEnBandejaEntrada("agustin@mail.com").contains(correo));
     }
 
 
